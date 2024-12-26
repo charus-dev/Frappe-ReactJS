@@ -1,43 +1,58 @@
-import React, { useState} from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from "react";
+import { useHabits } from "../context/HabitContext";
 
-const HabitItem = ({habit, onDelete, onUpdate }) =>{
-   const [newName, setNewName] = useState(habit.name);
-   const [isEditing, setIsEditing] = useState(false);
+const HabitItem = ({ habit }) => {
+    const { updateHabit, deleteHabit } = useHabits();
+    const [newName, setNewName] = useState(habit.name);
+    const [isEditing, setIsEditing] = useState(false);
 
-   const handleUpdate = () => {
-    onUpdate (habit.id, newName);
-    setIsEditing(false);
-   }
+    const handleUpdate = () => {
+        if (newName.trim()) {
+            updateHabit(habit.id, newName);
+            setIsEditing(false);
+        }
+    };
+
     return (
-     <>
-        <div>
-            {
-            isEditing ? (
-            <input type = "text" value = {newName} onChange = {(e) => setNewName (e.target.value)}/>
+        <div
+            style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                margin: "10px 0",
+                padding: "10px",
+                border: "1px solid #ccc",
+                borderRadius: "5px",
+                backgroundColor: "#f9f9f9",
+            }}
+        >
+            {isEditing ? (
+                <input
+                    type="text"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    style={{ flex: "1", marginRight: "10px", padding: "5px" }}
+                />
             ) : (
-                <span> {habit.name} </span> )
-            }
+                <span style={{ flex: "1" }}>{habit.name}</span>
+            )}
+            <div>
+                {isEditing ? (
+                    <button onClick={handleUpdate} style={{ marginRight: "5px" }}>
+                        Save
+                    </button>
+                ) : (
+                    <button
+                        onClick={() => setIsEditing(true)}
+                        style={{ marginRight: "5px" }}
+                    >
+                        Edit
+                    </button>
+                )}
+                <button onClick={() => deleteHabit(habit.id)}>Delete</button>
+            </div>
         </div>
-        <div>
-            {
-            isEditing ? (
-            <button onClick = {handleUpdate} style = {{}}> Save</button>
-            ) : (
-                <button onClick = {() => setIsEditing(true)} style = {{}}> Edit</button> )
-            }
-
-            <button onClick={ () => onDelete(habit.id)}> Delete</button>
-        </div>
-    </>
-    )
-   
-}
-
-HabitItem.propTypes = {
-   habit: PropTypes.object.isRequired,
-   onDelete: PropTypes.func.isRequired,
-   onUpdate: PropTypes.func.isRequired,
-}
+    );
+};
 
 export default HabitItem;
