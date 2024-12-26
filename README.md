@@ -1,7 +1,5 @@
 # Frappe-ReactJS
 
-# React Add, Update, Delete Habits
-
 ## Overview
 
 Welcome to the **React Healthy Habit Tracker** application! This project demonstrates two interactive components:
